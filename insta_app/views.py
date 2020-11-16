@@ -78,6 +78,7 @@ def instagram_some(request, name):
                     return render(request, "404.html")
 
                 insta_all = "https://www.instagram.com/" + "hongmingu" + "/?__a=1"
+                insta_all = "https://www.instagram.com/hongmingu/?__a=1"
 
                 session = requests.Session()
                 response_all = session.get(insta_all)
