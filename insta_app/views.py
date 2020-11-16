@@ -78,7 +78,9 @@ def instagram_some(request, name):
                     return render(request, "404.html")
 
                 insta_all = "https://www.instagram.com/" + "hongmingu" + "/?__a=1"
-                response_all = requests.get(insta_all)
+
+                session = requests.Session()
+                response_all = session.get(insta_all)
                 print(response_all.text)
                 get_text = json.loads(response_all.text)
                 follower_count = get_text["graphql"]["user"]["edge_followed_by"]["count"]
