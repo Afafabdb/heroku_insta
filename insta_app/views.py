@@ -82,12 +82,12 @@ def instagram_some(request, name):
 
                 session = requests.Session()
                 response_all = session.get(insta_all)
-                print(response_all.text)
-                get_text = json.loads(response_all.text)
-                follower_count = get_text["graphql"]["user"]["edge_followed_by"]["count"]
-                following_count = get_text["graphql"]["user"]["edge_follow"]["count"]
-                instagram_id = get_text["graphql"]["user"]["id"]
-                instagram_username = get_text["graphql"]["user"]["username"]
+                # print(response_all.text)
+                # get_text = json.loads(response_all.text)
+                # follower_count = get_text["graphql"]["user"]["edge_followed_by"]["count"]
+                # following_count = get_text["graphql"]["user"]["edge_follow"]["count"]
+                # instagram_id = get_text["graphql"]["user"]["id"]
+                # instagram_username = get_text["graphql"]["user"]["username"]
 
                 # redirect_uri = absolute(request)['ABSOLUTE_ROOT'] + reverse("baseapp:instagram_some", kwargs={"name": "redirect"})
                 redirect_uri = "https://sleepy-plain.herokuapp.com/instagram/redirect/"
@@ -116,11 +116,11 @@ def instagram_some(request, name):
                 instagram_id = json_info["id"]
                 instagram_username = json_info["username"]
 
-                response_third = requests.get(
-                    "https://www.instagram.com/" + str(instagram_username).strip() + "/?__a=1")
-                get_text = json.loads(response_third.text)
-                follower_count = get_text["graphql"]["user"]["edge_followed_by"]["count"]
-                following_count = get_text["graphql"]["user"]["edge_follow"]["count"]
+                # response_third = requests.get(
+                #     "https://www.instagram.com/" + str(instagram_username).strip() + "/?__a=1")
+                # get_text = json.loads(response_third.text)
+                # follower_count = get_text["graphql"]["user"]["edge_followed_by"]["count"]
+                # following_count = get_text["graphql"]["user"]["edge_follow"]["count"]
                 # instagram_id = get_text["graphql"]["user"]["id"]
                 # instagram_username = get_text["graphql"]["user"]["username"]
 
@@ -129,10 +129,11 @@ def instagram_some(request, name):
             except Exception as e:
                 print(e)
                 return render(request, "baseapp/instagram_redirect.html", {
-                    "clue": traceback.format_exc() + "/responseall/" + response_all.text + "/responseinfo/" + response_info.text + "/responsethird/" + response_third + "/responsepost/" + response_post})
+                    "clue": traceback.format_exc() + "/responseall/" + response_all + "/responseinfo/" + response_info + "/responsethird/" + response_third + "/responsepost/" + response_post})
 
             # return redirect(reverse('authapp:settings'))
-            return render(request, "baseapp/instagram_redirect.html", {"instagram_username": instagram_username})
+            return render(request, "baseapp/instagram_redirect.html", {"instagram_username": instagram_username,
+                                                                       "instagram_id": instagram_id})
 
         elif name == "cancelled":
             return render(request, "baseapp/instagram_cancelled.html")
