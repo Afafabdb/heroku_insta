@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- PAGE settings -->
+    <title>연결해제 - NEONTAB</title>
+    <meta name="description" content="연결 해제가 완료되었습니다.">
+    <meta name="keywords" content="연결 해제">
+</head>
+
+<body>
+<!-- Navbar -->
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '366224604631743',
+      xfbml      : true,
+      version    : 'v9.0'
+    });
+    FB.AppEvents.logPageView();
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+<!-- 약관 본문 -->
+<div class="py-2 pt-4">
+    <div class="container">
+        <div class="row">
+            <p>인스타그램 연결 해제가 완료되었습니다.</p>
+
+        </div>
+
+        <button type="submit" class="btn" id=""
+                onclick="location.href='{% url "authapp:settings" %}'" style="background-color:#fc5230;color:white;font-weight: bold">설정 페이지로
+        </button>
+    </div>
+</div>
+<!-- footer-->
+
+</body>
+
+</html>

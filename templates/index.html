@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+
+    <title>Insta Heroku</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+          type="text/css">
+</head>
+<body>
+
+<a href="https://api.instagram.com/oauth/authorize?client_id=453531205633119&redirect_uri=https://www.neontab.com/instagram/redirect/&scope=user_profile&response_type=code">
+    <div>move to insta</div>
+</a>
+<a href="https://api.instagram.com/oauth/authorize?client_id=453531205633119&redirect_uri=https://sleepy-plain.herokuapp.com/&scope=user_profile,user_media&response_type=code">
+    <div>backups</div>
+</a>
+</body>
+<script>
+    $(function () {
+        $('.follow').click(function (e) {
+            e.preventDefault()
+
+            if ($("#is_authenticated").html() === "0") {
+                $("#modal_require_sign_in").modal("show")
+                return
+            }
+            $.ajax({
+                type: 'post',
+                url: $('#follow_url').html(),
+                dataType: 'json',
+                cache: false,
+                data: {},
+                success: function (data) {
+                    if (data.res === 200) {
+
+                        var follow_word = (data.result) ? "팔로우취소" : "팔로잉하기";
+                        $('.follow').html(follow_word)
+                    } else {
+                        alert("failed")
+                    }
+
+                }
+            });
+
+
+        })
+    })
+
+</script>
+</html>

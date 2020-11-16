@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- PAGE settings -->
+    <!--<link rel="icon" href="https://templates.pingendo.com/assets/Pingendo_favicon.ico">-->
+    <title>Page Not Found - NeonTab</title>
+    <meta name="description" content="찾을 수 없는 페이지입니다. - NeonTab">
+    <meta name="keywords" content="Page Not Found">
+    {% include 'others/header_static.html' %}
+
+</head>
+
+<body class="text-center">
+<!-- Header_Navbar -->
+{% if request.META.HTTP_REFERER %}
+    <div class="d-none" id="back_url">{{ request.META.HTTP_REFERER }}</div>
+{% else %}
+    <div class="d-none" id="back_url">{% url "baseapp:home" %}</div>
+{% endif %}
+<!-- Main -->
+<div class="py-5" style="height: 600px;">
+    <div class="container">
+        <div class="row">
+            <!-- 모바일용 페이지 내용-->
+            <div class="d-block d-sm-none text-center mx-auto col-md-12" style="height: 500px;">
+                <div style="	height: 150px;" class="d-flex align-items-center justify-content-center">
+                    <img class="img-fluid d-block" src="https://static.pingendo.com/img-placeholder-1.svg" style="	width: 100px;	height: 100px;">
+                    <h3>문제가 발생했습니다.</h3>
+                </div>
+                <div style="height: 200px;" class="d-flex justify-content-center align-items-center">
+                    <h6 class="text-left" style=""><b>NeonTab을 찾아주신 고객님,&nbsp;<br>입력하신 페이지의 주소가 잘못 입력되었거나,&nbsp;</b><br><b>변경 또는 삭제되어 요청하신 페이지를 찾을 수 없습니다.&nbsp;<br>입력하신 주소가 정확한지 다시 한번 확인해주시기 바랍니다.&nbsp;</b></h6>
+                </div>
+                <div style="height: 150px;" class="d-flex align-items-center justify-content-center">
+                    <a href="#" class="btn mx-1 text-white" style="background-color:#006837"><b>이전 페이지로</b></a>
+                    <a href="{% url "baseapp:home" %}" class="btn mx-1 text-white" style="background-color:#006837;"><b>NeonTab 홈으로</b></a>
+                </div>
+            </div>
+            <!-- 데스크탑용 페이지 내용-->
+           <div class="d-none d-sm-block text-center mx-auto col-md-12" style="	height: 600px;">
+                <div style="	height: 150px;" class="d-flex align-items-center justify-content-center">
+                    <img class="img-fluid d-block" src="https://static.pingendo.com/img-placeholder-1.svg" style="width: 100px;	height: 100px;">
+                    <h3 class="display-4 text-dark">문제가 발생했습니다.</h3>
+                </div>
+                <div style="height: 300px;" class="d-flex justify-content-center align-items-center">
+                    <h5 class="text-left" style=""><b>NeonTab 찾아주신 고객님,&nbsp;<br>입력하신 페이지의 주소가 잘못 입력되었거나, 변경 또는 삭제되어 요청하신<br>페이지를 찾을 수 없습니다.&nbsp;<br>입력하신 주소가 정확한지 다시 한번 확인해주시기 바랍니다.&nbsp;</b></h5>
+                </div>
+                <div style="height: 150px;" class="d-flex align-items-center justify-content-center">
+                    <a href="#" class="btn mx-1 text-white go_back" style="background-color:#006837"><b>이전 페이지로</b></a>
+                    <a href="{% url "baseapp:home" %}" class="btn mx-1 text-white" style="background-color:#006837;"><b>NeonTab 홈으로</b></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- JavaScript dependencies -->
+<script>
+
+    $(function () {
+
+        let url = document.referrer
+
+        let arr = url.split("/");
+        let result = arr[0] + "//" + arr[2]
+        if (result === document.location.origin) {
+            // 이전 페이지가 같음.
+            $("#previous").click(function (e) {
+                e.preventDefault()
+                window.history.back();
+            })
+        } else {
+            // 이전 페이지가 다른 사이트
+            $("#previous").addClass("d-none")
+        }
+    })
+
+</script>
+
+</body>
+
+</html>
