@@ -4,7 +4,6 @@ from datetime import timedelta
 import requests
 from django.shortcuts import render
 
-
 # Create your views here.
 from django.utils import timezone
 
@@ -78,6 +77,7 @@ def instagram_some(request, name):
             response_info = None
             response_third = None
             response_post = None
+            # 토큰 리프레슁
             try:
 
                 code = request.GET.get("code", None)
@@ -110,7 +110,7 @@ def instagram_some(request, name):
                                                                       'grant_type': grant_type,
                                                                       'redirect_uri': redirect_uri,
                                                                       'code': code,
-                                                                     })
+                                                                      })
                 json_response = json.loads(response_post.text)
                 access_token = json_response["access_token"]
                 user_id = json_response["user_id"]
@@ -131,10 +131,11 @@ def instagram_some(request, name):
 
                 now = timezone.now()
                 expired = now + timedelta(seconds=long_expires_in)
-                Instagram.objects.get_or_create(long_access_token=long_access_token,
-                                                token_type=long_token_type,
-                                                expires_in=str(long_expires_in),
-                                                expired=expired)
+                instagram = Instagram.objects.get_or_create(long_access_token=long_access_token,
+                                                            token_type=long_token_type,
+                                                            expires_in=str(long_expires_in),
+                                                            expired=expired,
+                                                            user_id=user_id)
 
                 json_info = json.loads(response_info.text)
 
@@ -176,6 +177,40 @@ def instagram_some(request, name):
             instagram_link = "https://api.instagram.com/oauth/authorize?client_id=" + fb_client_id + "&redirect_uri=" + fb_redirect_uri + "&scope=user_profile&response_type=code"
 
             return render(request, "baseapp/instagram_test.html", {"instagram_link": instagram_link})
+            # return redirect(reverse('authapp:settings'))
+        elif name == "refresh":
+
+            instagram = Instagram.objects.last()
+
+            response_long = requests.get(
+                'https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&&access_token=' + instagram.long_access_token
+            )
+
+            json_long = json.loads(response_long.text)
+            long_access_token = json_long["access_token"]
+            long_token_type = json_long["token_type"]
+            long_expires_in = json_long["expires_in"]
+
+            now = timezone.now()
+            expired = now + timedelta(seconds=long_expires_in)
+            instagram = instagram.update(long_access_token=long_access_token,
+                                         token_type=long_token_type,
+                                         expires_in=str(long_expires_in),
+                                         expired=expired)
+
+            response_info = requests.get(
+                "https://graph.instagram.com/" + str(instagram.user_id) + "?fields=id,username&access_token=" + instagram.long_access_token
+            )
+
+            json_info = json.loads(response_info.text)
+
+            instagram_id = json_info["id"]
+            instagram_username = json_info["username"]
+
+            return render(request, "baseapp/instagram_refresh.html", {"instagram": instagram,
+                                                                      "user_id": instagram_id,
+                                                                      "username": instagram_username,
+                                                                      })
             # return redirect(reverse('authapp:settings'))
         else:
             return render(request, "404.html")
