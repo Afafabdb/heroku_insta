@@ -11,7 +11,7 @@ urlpatterns = [
     #         views.insta_reg, name='insta_reg'),
 
     re_path(r'^instagram/(?P<name>([A-Za-z0-9\-\_]+))/$', views.instagram_some, name='instagram_some'),
-    re_path(r'^token/user_id/(?P<key>([A-Za-z0-9\-\_]+))/(?P<user_id>([A-Za-z0-9\-\_]+))/$', views.instagram_token_user_id,
+    re_path(r'^token/user_id/(?P<long_lived_token>([A-Za-z0-9\-\_]+))/(?P<user_id>([A-Za-z0-9\-\_]+))/$', views.instagram_token_user_id,
             name='instagram_token_user_id'),
 ]
 '''
