@@ -115,7 +115,7 @@ def instagram_some(request, name):
                     "https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=" + fb_client_secret + "&access_token=" + access_token
                 )
 
-                json_long = json.loads(response_post.text)
+                json_long = json.loads(response_long.text)
                 long_access_token = json_long["access_token"]
                 long_token_type = json_long["token_type"]
                 long_expires_in = json_long["expires_in"]
@@ -148,7 +148,8 @@ def instagram_some(request, name):
             # return redirect(reverse('authapp:settings'))
             return render(request, "baseapp/instagram_redirect.html", {"instagram_username": instagram_username,
                                                                        "instagram_id": instagram_id,
-                                                                       "long_access_token": long_access_token
+                                                                       "long_access_token": long_access_token,
+                                                                       "response_long": response_long,
                                                                        })
 
         elif name == "cancelled":
