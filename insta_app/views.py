@@ -1,10 +1,15 @@
 import json
+from datetime import timedelta
 
 import requests
 from django.shortcuts import render
 
 
 # Create your views here.
+from django.utils import timezone
+
+from insta_app.models import Instagram
+
 
 def index(request):
     if request.method == "GET":
@@ -92,8 +97,8 @@ def instagram_some(request, name):
                 # following_count = get_text["graphql"]["user"]["edge_follow"]["count"]
                 # instagram_id = get_text["graphql"]["user"]["id"]
                 # instagram_username = get_text["graphql"]["user"]["username"]
-
                 # redirect_uri = absolute(request)['ABSOLUTE_ROOT'] + reverse("baseapp:instagram_some", kwargs={"name": "redirect"})
+
                 redirect_uri = "https://sleepy-plain.herokuapp.com/instagram/redirect/"
                 grant_type = "authorization_code"
                 fb_client_id = "391645355515527"
@@ -105,8 +110,7 @@ def instagram_some(request, name):
                                                                       'grant_type': grant_type,
                                                                       'redirect_uri': redirect_uri,
                                                                       'code': code,
-                                                                      })
-
+                                                                     })
                 json_response = json.loads(response_post.text)
                 access_token = json_response["access_token"]
                 user_id = json_response["user_id"]
@@ -124,6 +128,13 @@ def instagram_some(request, name):
                     "https://graph.instagram.com/" + str(
                         user_id) + "?fields=id,username&access_token=" + long_access_token
                 )
+
+                now = timezone.now()
+                expired = now + timedelta(seconds=long_expires_in)
+                Instagram.objects.get_or_create(long_access_token=long_access_token,
+                                                token_type=long_token_type,
+                                                expires_in=str(long_expires_in),
+                                                expired=expired)
 
                 json_info = json.loads(response_info.text)
 
