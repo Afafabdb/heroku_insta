@@ -92,8 +92,8 @@ def instagram_some(request, name):
                 # redirect_uri = absolute(request)['ABSOLUTE_ROOT'] + reverse("baseapp:instagram_some", kwargs={"name": "redirect"})
                 redirect_uri = "https://sleepy-plain.herokuapp.com/instagram/redirect/"
                 grant_type = "authorization_code"
-                fb_client_id = "453531205633119"
-                fb_client_secret = "9d215ffa8ed163c081d84c25f2d2e85a"
+                fb_client_id = "391645355515527"
+                fb_client_secret = "2bc5f377f8e779c4d250e79099307e7c"
                 fb_insta_api_url = "https://api.instagram.com/oauth/access_token"
 
                 response_post = requests.post(fb_insta_api_url, data={'client_id': fb_client_id,
@@ -104,12 +104,22 @@ def instagram_some(request, name):
                                                                       })
 
                 json_response = json.loads(response_post.text)
-                print(response_post.text)
                 access_token = json_response["access_token"]
                 user_id = json_response["user_id"]
 
+                response_long = requests.get(
+                    "https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=" + fb_client_secret + "&access_token=" + access_token
+                )
+
+                json_long = json.loads(response_post.text)
+                long_access_token = json_long["access_token"]
+                long_token_type = json_long["token_type"]
+                long_expires_in = json_long["expires_in"]
+
+
                 response_info = requests.get(
-                    "https://graph.instagram.com/" + str(user_id) + "?fields=id,username&access_token=" + access_token)
+                    "https://graph.instagram.com/" + str(user_id) + "?fields=id,username&access_token=" + long_access_token
+                )
 
                 json_info = json.loads(response_info.text)
 
@@ -133,7 +143,9 @@ def instagram_some(request, name):
 
             # return redirect(reverse('authapp:settings'))
             return render(request, "baseapp/instagram_redirect.html", {"instagram_username": instagram_username,
-                                                                       "instagram_id": instagram_id})
+                                                                       "instagram_id": instagram_id,
+                                                                       "long_access_token": long_access_token
+                                                                       })
 
         elif name == "cancelled":
             return render(request, "baseapp/instagram_cancelled.html")
@@ -153,7 +165,6 @@ def instagram_some(request, name):
             # return redirect(reverse('authapp:settings'))
         else:
             return render(request, "404.html")
-
 
 
 def strip_end(text, suffix):
