@@ -120,9 +120,9 @@ def instagram_some(request, name):
                 long_token_type = json_long["token_type"]
                 long_expires_in = json_long["expires_in"]
 
-
                 response_info = requests.get(
-                    "https://graph.instagram.com/" + str(user_id) + "?fields=id,username&access_token=" + long_access_token
+                    "https://graph.instagram.com/" + str(
+                        user_id) + "?fields=id,username&access_token=" + long_access_token
                 )
 
                 json_info = json.loads(response_info.text)
@@ -138,8 +138,6 @@ def instagram_some(request, name):
                 # instagram_id = get_text["graphql"]["user"]["id"]
                 # instagram_username = get_text["graphql"]["user"]["username"]
 
-
-
             except Exception as e:
                 print(e)
                 return render(request, "baseapp/instagram_redirect.html", {
@@ -149,7 +147,7 @@ def instagram_some(request, name):
             return render(request, "baseapp/instagram_redirect.html", {"instagram_username": instagram_username,
                                                                        "instagram_id": instagram_id,
                                                                        "long_access_token": long_access_token,
-                                                                       "response_long": response_long,
+                                                                       "response_long": response_long.text,
                                                                        })
 
         elif name == "cancelled":
@@ -170,6 +168,26 @@ def instagram_some(request, name):
             # return redirect(reverse('authapp:settings'))
         else:
             return render(request, "404.html")
+
+
+def instagram_token_user_id(request, long_lived_token, user_id):
+    if request.method == "GET":
+        if long_lived_token is None:
+            return render(request, "404.html")
+
+        response_info = requests.get(
+            "https://graph.instagram.com/" + str(user_id) + "?fields=id,username&access_token=" + long_lived_token
+        )
+
+        json_info = json.loads(response_info.text)
+
+        instagram_id = json_info["id"]
+        instagram_username = json_info["username"]
+
+        return render(request, "baseapp/instagram_token_user_id.html", {"instagram_id": instagram_id,
+                                                                        "instagram_username": instagram_username,
+                                                                        "response": response_info.text,
+                                                                        })
 
 
 def strip_end(text, suffix):
