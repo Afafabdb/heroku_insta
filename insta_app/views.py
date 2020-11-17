@@ -8,8 +8,12 @@ from django.shortcuts import render
 
 def index(request):
     if request.method == "GET":
-        text = "https://sleepy-plain.herokuapp.com/?code=AQBvCYrdMMYFYRSW1eQiLb4B8d8-KwtNc420obkPspDYmMHDJf0hR5_vzJYpfmcn3ZLCNXkm8iJ45ah8l7ILO1LLaY-4oErw58KRhsTLlCbPZjhw6vfK3JdUoWuhNSaR7_LHxeWva57J2FxhofcHeRORH-D_rCUWPIlRHEyh4BJV_5k7rKKBKjzhGf-xkY9Ve2IR_MaMYHdZE0oBnN1oBe2unsxz2D9StapLNqhIxIA_6A#_"
-        return render(request, "index.html")
+        fb_client_id = "391645355515527"
+        # fb_redirect_uri = absolute(request)['ABSOLUTE_ROOT'] + reverse("baseapp:instagram_some", kwargs={"name": "redirect"})
+        fb_redirect_uri = "https://sleepy-plain.herokuapp.com/instagram/redirect/"
+
+        instagram_link = "https://api.instagram.com/oauth/authorize?client_id=" + fb_client_id + "&redirect_uri=" + fb_redirect_uri + "&scope=user_profile&response_type=code"
+        return render(request, "index.html", {"instagram_link": instagram_link})
 
 
 def code(request):
