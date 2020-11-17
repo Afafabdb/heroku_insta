@@ -193,13 +193,15 @@ def instagram_some(request, name):
 
             now = timezone.now()
             expired = now + timedelta(seconds=long_expires_in)
-            instagram = instagram.update(long_access_token=long_access_token,
-                                         token_type=long_token_type,
-                                         expires_in=str(long_expires_in),
-                                         expired=expired)
+
+            instagram.long_access_token = long_access_token
+            instagram.token_type = long_token_type
+            instagram.expires_in = str(long_expires_in)
+            instagram.expired = expired
 
             response_info = requests.get(
-                "https://graph.instagram.com/" + str(instagram.user_id) + "?fields=id,username&access_token=" + instagram.long_access_token
+                "https://graph.instagram.com/" + str(
+                    instagram.user_id) + "?fields=id,username&access_token=" + instagram.long_access_token
             )
 
             json_info = json.loads(response_info.text)
