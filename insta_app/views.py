@@ -198,6 +198,7 @@ def instagram_some(request, name):
             instagram.token_type = long_token_type
             instagram.expires_in = str(long_expires_in)
             instagram.expired = expired
+            instagram.save()
 
             response_info = requests.get(
                 "https://graph.instagram.com/" + str(
